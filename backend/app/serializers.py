@@ -64,11 +64,38 @@ class AmenityTypeSerializer(serializers.ModelSerializer):
         fields = '__all__' 
 
 class PropertySerializer(serializers.ModelSerializer):
-    host = UserSerializer()
+    host = UserSerializer(read_only=True)
+    photos = photoSerializer(many=True)
+    property_type = PropertyTypeSerializer()
+    rooms = RoomSerializer(many=True)
+    amenities = AmenityTypeSerializer(many=True)
+
     class Meta:
         model = Property
         fields = '__all__'
         depth = 1
+
+    def create(self, validated_data):
+        photos_data = validated_data.pop('photos')
+        property_type = validated_data.pop('property_type')["name"]
+        rooms_data = validated_data.pop('room')
+        amenities_data = validated_data.pop('amenities')
+        property= Property.objects.create(**validated_data)
+        for photo_data in photos_data:
+            photo = Photo.objects.create(property=property, **photo_data)
+            property.photos.add(photo)
+        for room_data in rooms_data:
+            room = Room.objects.create(property=property, **room_data)
+            property.room.add(room)
+        for amenity_data in amenities_data:
+            amenity = AmenityType.objects.get(name=amenity_name['name'])
+            property.amenities.add(amenity)
+        property_type = validated_data.pop('property_type')["name"]
+        property.property_type=property_type
+        property.save()
+        return property
+
+
        
 
 

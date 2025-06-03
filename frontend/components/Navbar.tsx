@@ -68,31 +68,36 @@ function Navbar() {
         </div>
       </header>
 
-      <div className="flex justify-center mt-4">
-        <DateRangePicker
-          ranges={[selectionRange]}
-          minDate={new Date()}
-          rangeColors={['#FD5B61']}
-          onChange={handleSelect}
-        />
-      </div>
+      {searchInput && (
+  <div>
+    <div className="flex justify-center mt-4">
+      <DateRangePicker
+        ranges={[selectionRange]}
+        minDate={new Date()}
+        rangeColors={['#FD5B61']}
+        onChange={handleSelect}
+      />
+    </div>
 
-      <div className="flex items-center justify-center space-x-2 mt-4">
-        <UserIcon className="h-6" />
-        <h1 className="text-center">Guests</h1>
-        <input
-          type="number"
-          className="w-12 border-2 rounded-md text-center"
-          min={1}
-          value={noOfGuests}
-          onChange={(e) => setNoOfGuests(Number(e.target.value))}
-        />
-        <button className="text-red-600 pl-8" onClick={handleClick}>
-          Search
-        </button>
-      </div>
+    <div className="flex items-center justify-center space-x-2 mt-4">
+      <UserIcon className="h-6" />
+      <h1 className="text-center">Guests</h1>
+      <input
+        type="number"
+        className="w-12 border-2 rounded-md text-center"
+        min={1}
+        max={5}
+        value={noOfGuests}
+        onChange={(e) => setNoOfGuests(Number(e.target.value))}
+      />
+      <button className="text-red-600 pl-8" onClick={handleClick}>
+        Search
+      </button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }
-
 export default Navbar;
