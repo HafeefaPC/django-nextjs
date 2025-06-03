@@ -28,6 +28,16 @@ class RoomSerializer(serializers.ModelSerializer):
         model =  Room
         fields = '__all__'
 
+class BookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = '__all__'
+        
+class RoomBookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoomBooking
+        fields = '__all__'
+
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
@@ -38,14 +48,9 @@ class photoSerializer(serializers.ModelSerializer):
         model = Photo
         fields = '__all__'
 
-class PropertySerializer(serializers.ModelSerializer):
+class PropertyTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Property
-        fields = '__all__'
-       
-class AmenityTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AmenityType
+        model = PropertyType
         fields = '__all__'
 
 class AmenitySerializer(serializers.ModelSerializer):
@@ -53,7 +58,21 @@ class AmenitySerializer(serializers.ModelSerializer):
         model = Amenity
         fields = '__all__'
 
-class PropertyTypeSerializer(serializers.ModelSerializer):
+class AmenityTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PropertyType
+        model = AmenityType
+        fields = '__all__' 
+
+class PropertySerializer(serializers.ModelSerializer):
+    host = UserSerializer()
+    class Meta:
+        model = Property
         fields = '__all__'
+        depth = 1
+       
+
+
+
+
+
+        
