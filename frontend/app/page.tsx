@@ -3,7 +3,7 @@ import Card from "../components/Card";
 
 interface Photo {
   id: string | number;
-  urls: string;
+  url: string; // Changed from 'urls' to 'url'
   alt_text: string;
 }
 
@@ -28,7 +28,6 @@ export default async function Home() {
 
   return (
     <div>
-    
       <div className="mx-5 my-7">
         <h1 className="text-3xl font-semibold mb-3">Properties</h1>
         <section className="flex flex-wrap">

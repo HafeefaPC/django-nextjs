@@ -35,7 +35,7 @@ interface Property {
   price: number;
   photos: Photo[];
   host: Host;
-  property_type: PropertyType;
+  property_type: PropertyType | null;
   amenities: Amenity[];
 }
 
@@ -44,6 +44,14 @@ export default function PropertyDetails() {
   const id = params.id as string;
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+
+  const defaultImages = [
+    "https://q-xx.bstatic.com/xdata/images/hotel/max500/60626094.jpg?k=7bce74b3dc14f5542f74d26be7ec1e94e2df47c6fcee3c3db54331b11cf8523c&o=",
+    "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1000&h=600&fit=crop",
+    "https://via.placeholder.com/1000x600/e5e7eb/6b7280?text=Property+Image"
+  ];
+  const [fallbackIndex, setFallbackIndex] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -80,15 +88,29 @@ export default function PropertyDetails() {
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <div className="w-full max-w-3xl p-6 bg-white rounded-lg shadow-md">
         <div className="flex justify-center">
-          {property.photos[0] && (
-            <Image
-              className="rounded-lg shadow-lg"
-              src={property.photos[0].url}
-              alt={property.photos[0].alt_text}
-              width={1000}
-              height={600}
-            />
-          )}
+          <Image
+            className="rounded-lg shadow-lg object-cover"
+            src={
+              !imageError && property.photos && property.photos[0] 
+                ? property.photos[0].url 
+                : defaultImages[fallbackIndex]
+            }
+            alt={
+              property.photos && property.photos[0] 
+                ? property.photos[0].alt_text 
+                : "Property image"
+            }
+            width={1000}
+            height={600}
+            onError={() => {
+              if (!imageError && property.photos && property.photos[0]) {
+                setImageError(true);
+              } else if (fallbackIndex < defaultImages.length - 1) {
+                setFallbackIndex(prev => prev + 1);
+              }
+            }}
+            priority
+          />
         </div>
         <div className="mt-4 text-center">
           <h1 className="text-2xl font-semibold text-gray-700">{property.title}</h1>
@@ -111,7 +133,9 @@ export default function PropertyDetails() {
           </div>
           <div className="mt-4">
             <HomeIcon className="h-6 mb-1 inline-block" />
-            <span className="text-m font-light text-gray-700">Property Type: {property.property_type.name}</span>
+            <span className="text-m font-light text-gray-700">
+              Property Type: {property.property_type?.name || 'Not specified'}
+            </span>
           </div>
           <div className="mt-4">
             <InformationCircleIcon className="h-6 mb-1 inline-block" />
@@ -131,7 +155,3 @@ export default function PropertyDetails() {
     </div>
   );
 }
-
-
-
-
