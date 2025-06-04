@@ -27,10 +27,14 @@ SECRET_KEY = config("SECRET_KEY", default='django-insecure-default-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = ['3.111.42.44', 'localhost']
+ALLOWED_HOSTS = [
+    '3.111.42.44',  # your EC2 public IP
+    'localhost',
+    '127.0.0.1',
+]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 
 
