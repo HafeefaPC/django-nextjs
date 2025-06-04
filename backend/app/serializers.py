@@ -67,7 +67,7 @@ class PropertySerializer(serializers.ModelSerializer):
     host = UserSerializer(read_only=True)
     photos = photoSerializer(many=True)
     property_type = PropertyTypeSerializer()
-    rooms = RoomSerializer(many=True)
+    room = RoomSerializer(many=True)  # Changed from 'rooms' to 'room'
     amenities = AmenityTypeSerializer(many=True)
 
     class Meta:
@@ -78,7 +78,7 @@ class PropertySerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         photos_data = validated_data.pop('photos')
         property_type = validated_data.pop('property_type')["name"]
-        rooms_data = validated_data.pop('room')
+        rooms_data = validated_data.pop('room')  # This is correct
         amenities_data = validated_data.pop('amenities')
         property= Property.objects.create(**validated_data)
         for photo_data in photos_data:
@@ -94,12 +94,3 @@ class PropertySerializer(serializers.ModelSerializer):
         property.property_type=property_type
         property.save()
         return property
-
-
-       
-
-
-
-
-
-        
